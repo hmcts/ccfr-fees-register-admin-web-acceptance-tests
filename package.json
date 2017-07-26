@@ -1,0 +1,39 @@
+{
+  "name": "fees-register-admin-web-acceptance-tests",
+  "version": "0.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=6.0"
+  },
+  "scripts": {
+    "test": "cross-env NODE_PATH=. mocha 'test/**/*_test.js'",
+    "setup": "cross-env NODE_PATH=."
+  },
+  "dependencies": {
+    "body-parser": "~1.16.0",
+    "cookie-parser": "~1.4.3",
+    "cross-env": "^3.1.4",
+    "debug": "~2.6.0",
+    "express": "~4.14.1",
+    "express-validator": "^3.1.2",
+    "hbs": "~4.0.1",
+    "i18n": "^0.8.3",
+    "jsdom": "^9.12.0",
+    "lodash": "^4.17.4",
+    "log4js": "^1.1.0",
+    "moment": "^2.17.1",
+    "morgan": "~1.7.0",
+    "serve-favicon": "~2.3.2",
+    "superagent": "^3.5.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "codeceptjs": "https://github.com/hmcts/CodeceptJS.git#0.5.2",
+    "moment": "~2.17.1",
+    "nightmare": "~2.10.0",
+    "pg": "~6.1.2",
+    "proxyquire": "^1.7.11",
+    "sinon": "^1.17.7",
+    "sinon-chai": "^2.8.0"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "tests": "./tests/*_test.js",
+  "timeout": 10000,
+  "output": "./output",
+  "helpers": {
+    "Nightmare": {
+      "switches": {
+        "ignore-certificate-errors": "true"
+      },
+      "url": "https://dev-admin.fees-register.reform.hmcts.net/",
+      "waitForTimeout": 2000,
+      "waitForAction": 2000,
+      "show": "false"
+    }
+  },
+  "include": {
+    "I": "./pages/steps_file.js"
+  },
+  "bootstrap": false,
+  "mocha": {},
+  "name": "fees-register-admin-web-acceptance-tests"
+}
