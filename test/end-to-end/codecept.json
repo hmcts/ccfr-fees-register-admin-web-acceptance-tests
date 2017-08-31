@@ -8,9 +8,9 @@
         "ignore-certificate-errors": "true"
       },
       "url": "https://dev-admin.fees-register.reform.hmcts.net/",
-      "waitForTimeout": 2000,
-      "waitForAction": 2000,
-      "show": "false"
+      "waitForTimeout": 1000,
+      "waitForAction": 1000,
+      "show": "true"
     }
   },
   "include": {
@@ -19,4 +19,6 @@
   "bootstrap": false,
   "mocha": {},
   "name": "fees-register-admin-web-acceptance-tests"
+
+
 }

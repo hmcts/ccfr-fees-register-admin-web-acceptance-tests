@@ -24,16 +24,17 @@
     "moment": "^2.17.1",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.2",
-    "superagent": "^3.5.0"
+    "superagent": "^3.6.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "codeceptjs": "https://github.com/hmcts/CodeceptJS.git#0.5.2",
+    "codeceptjs": "git+https://github.com/hmcts/CodeceptJS.git#0.5.2",
+    "faker": "^4.1.0",
     "moment": "~2.17.1",
     "nightmare": "~2.10.0",
-    "pg": "~6.1.2",
     "proxyquire": "^1.7.11",
+    "rosie": "^1.6.0",
     "sinon": "^1.17.7",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.13.0"
   }
 }
