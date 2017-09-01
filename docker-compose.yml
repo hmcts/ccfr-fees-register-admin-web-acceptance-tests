@@ -1,0 +1,82 @@
+version: '2.1'
+
+services:
+  wait-for-startup:
+    command: /bin/echo Fees Register Started
+    image: alpine
+    depends_on:
+      fees-api:
+        condition: service_healthy
+
+  fees-admin-web:
+    image: docker.artifactory.reform.hmcts.net/fees-register/fees-admin-web:${FEES_ADMIN_WEB_DOCKER_VERSION:-latest}
+    environment:
+      - NODE_ENV=development
+      - PORT=3415
+      - FEES_URL=fees_register
+      - IDAM_AUTHENTICATION_WEB_URL=https://localhost:3551
+      - IDAM_API_URL=http://idam-api:8080
+      - FEES_URL=http://fees-api:8080
+    ports:
+      - 3415:3415
+    links:
+      - idam-api
+      - fees-database
+      - authentication-web
+    depends_on:
+      - idam-api
+      - fees-database
+      - authentication-web
+
+  fees-api:
+    image: docker.artifactory.reform.hmcts.net/fees-register/fees-api:${FEES_API_DOCKER_VERSION:-latest}
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://fees-database:5432/fees_register
+      - SPRING_DATASOURCE_USERNAME=fees_register
+      - SPRING_DATASOURCE_PASSWORD=fees_register
+      - AUTH_IDAM_CLIENT_BASEURL=http://idam-api:8080
+    ports:
+      - 4411:8080
+    links:
+      - idam-api
+      - fees-database
+    depends_on:
+      - idam-api
+      - fees-database
+
+  fees-database:
+    image: docker.artifactory.reform.hmcts.net/fees-register/fees-database:${FEES_DATABASE_DOCKER_VERSION:-latest}
+    environment:
+      - FEES_REGISTER_DB_USERNAME=fees_register
+      - FEES_REGISTER_DB_PASSWORD=fees_register
+
+  authentication-web:
+    image: docker.artifactory.reform.hmcts.net/auth/authentication-web
+    environment:
+      - IDAM_API_URL=http://idam-api:8080
+    ports:
+      - 3551:8000
+    depends_on:
+      - idam-api
+
+  idam-api:
+    image: docker.artifactory.reform.hmcts.net/auth/idam-api
+    command: --wait-for-database 30
+    environment:
+      - IDAM_SUPERUSER_EMAIL
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://idam-database:5432/idam
+      - SPRING_PROFILES_ACTIVE=test
+      - IDAM_TESTING_SUPPORT_ENABLED=true
+      - LOGGING_LEVEL_UK_GOV_HMCTS_IDAM=DEBUG
+      - http_proxy=
+      - https_proxy=
+      - no_proxy=
+    ports:
+      - 4551:8080
+    links:
+      - idam-database
+    depends_on:
+      - idam-database
+
+  idam-database:
+    image: docker.artifactory.reform.hmcts.net/auth/idam-database
