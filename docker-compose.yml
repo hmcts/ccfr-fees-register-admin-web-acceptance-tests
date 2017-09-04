@@ -20,7 +20,7 @@ services:
       remote-webdriver:
         condition: service_started
       fees-admin-web:
-        condition: service_started
+        condition: service_healthy
       authentication-web:
         condition: service_healthy
     volumes:
