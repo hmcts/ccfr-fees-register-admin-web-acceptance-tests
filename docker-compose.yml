@@ -19,8 +19,10 @@ services:
     depends_on:
       remote-webdriver:
         condition: service_started
-      fees-admin-web:
+      fees-api:
         condition: service_healthy
+      fees-admin-web:
+        condition: service_started
       authentication-web:
         condition: service_healthy
     volumes:
@@ -41,6 +43,8 @@ services:
         condition: service_healthy
       authentication-web:
         condition: service_healthy
+    ports:
+      - 3000:3000
     networks:
       default:
         aliases:
