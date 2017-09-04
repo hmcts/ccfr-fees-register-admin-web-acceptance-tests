@@ -27,7 +27,7 @@ lock('Fees Register Admin Web acceptance tests') {
 
                     sh 'docker-compose build'
                     sh 'docker-compose pull'
-                    sh 'docker-compose up fees-admin-web remote-webdriver'
+                    sh 'docker-compose up -d fees-admin-web remote-webdriver'
                 }
 
                 stage('Run acceptance tests') {
