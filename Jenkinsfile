@@ -22,23 +22,18 @@ lock('Fees Register Admin Web acceptance tests') {
                     env.FEES_ADMIN_WEB_DOCKER_VERSION = params.feesAdminWebDockerVersion
 
                     sh 'docker-compose pull'
-                    sh 'docker-compose up -d fees-admin-web'
-                    sh 'docker-compose up wait-for-startup'
+                    sh 'docker-compose up fees-admin-web remote-webdriver'
                 }
 
                 stage('Run acceptance tests') {
-                    def rtMaven = Artifactory.newMavenBuild()
-                    rtMaven.tool = 'apache-maven-3.3.9'
-                    rtMaven.run pom: 'pom.xml', goals: 'clean package surefire-report:report -Dspring.profiles.active=docker'
+                    sh 'mkdir -p output'
+                    sh 'docker-compose up integration-tests'
 
-                    publishHTML([
-                            allowMissing         : false,
-                            alwaysLinkToLastBuild: true,
-                            keepAll              : false,
-                            reportDir            : 'target/site',
-                            reportFiles          : 'surefire-report.html',
-                            reportName           : 'Acceptance Test Report'
-                    ])
+                    def exitCode = sh returnStdout: true, script: "docker-compose ps -q integration-tests | xargs docker inspect -f '{{ .State.ExitCode }}'"
+                    if (exitCode.toInteger() > 0) {
+                        steps.archiveArtifacts 'output/*.png'
+                        steps.error("Integration tests failed")
+                    }
                 }
             } finally {
                 stage('Stop Docker Images') {
