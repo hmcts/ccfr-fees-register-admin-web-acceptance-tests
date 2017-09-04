@@ -9,7 +9,6 @@ services:
         - http_proxy
         - https_proxy
         - no_proxy
-    image: docker.artifactory.reform.hmcts.net/fees-register/integration-tests
     environment:
       - WEB_DRIVER_HOST=remote-webdriver
       - URL=https://admin.fees-register.reform.hmcts.net:3000

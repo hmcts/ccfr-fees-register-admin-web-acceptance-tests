@@ -17,10 +17,15 @@ lock('Fees Register Admin Web acceptance tests') {
                 checkout scm
             }
 
+            stage('Setup') {
+                sh 'yarn install'
+            }
+
             try {
                 stage('Start Docker Images') {
                     env.FEES_ADMIN_WEB_DOCKER_VERSION = params.feesAdminWebDockerVersion
 
+                    sh 'docker-compose build'
                     sh 'docker-compose pull'
                     sh 'docker-compose up fees-admin-web remote-webdriver'
                 }
