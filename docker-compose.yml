@@ -1,0 +1,97 @@
+version: '2.1'
+
+services:
+  integration-tests:
+    command: test -- --steps
+    build:
+      context: .
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    environment:
+      - WEB_DRIVER_HOST=remote-webdriver
+      - URL=https://admin.fees-register.reform.hmcts.net:3000
+      - IDAM_URL=http://idam-api:8080
+      - http_proxy
+      - https_proxy
+      - no_proxy=remote-webdriver,admin.fees-register.reform.hmcts.net,idam-api,authentication-web
+    depends_on:
+      remote-webdriver:
+        condition: service_started
+      fees-api:
+        condition: service_healthy
+      fees-admin-web:
+        condition: service_started
+      authentication-web:
+        condition: service_healthy
+    volumes:
+      - ./output:/usr/src/app/output
+
+  remote-webdriver:
+    image: docker.artifactory.reform.hmcts.net/selenium/standalone-chrome:3
+
+  fees-admin-web:
+    image: docker.artifactory.reform.hmcts.net/fees-register/fees-admin-web:${FEES_ADMIN_WEB_DOCKER_VERSION:-latest}
+    environment:
+      - NODE_ENV=development
+      - IDAM_AUTHENTICATION_WEB_URL=https://authentication-web:8000
+      - IDAM_API_URL=http://idam-api:8080
+      - FEES_URL=http://fees-api:8080
+    depends_on:
+      fees-api:
+        condition: service_healthy
+      authentication-web:
+        condition: service_healthy
+    ports:
+      - 3000:3000
+    networks:
+      default:
+        aliases:
+          - admin.fees-register.reform.hmcts.net
+
+  fees-api:
+    image: docker.artifactory.reform.hmcts.net/fees-register/fees-api:${FEES_API_DOCKER_VERSION:-latest}
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://fees-database:5432/fees_register
+      - SPRING_DATASOURCE_USERNAME=fees_register
+      - SPRING_DATASOURCE_PASSWORD=fees_register
+      - AUTH_IDAM_CLIENT_BASEURL=http://idam-api:8080
+    depends_on:
+      idam-api:
+        condition: service_healthy
+      fees-database:
+        condition: service_started
+
+  fees-database:
+    image: docker.artifactory.reform.hmcts.net/fees-register/fees-database:${FEES_DATABASE_DOCKER_VERSION:-latest}
+    environment:
+      - FEES_REGISTER_DB_USERNAME=fees_register
+      - FEES_REGISTER_DB_PASSWORD=fees_register
+
+  authentication-web:
+    image: docker.artifactory.reform.hmcts.net/auth/authentication-web
+    environment:
+      - IDAM_API_URL=http://idam-api:8080
+    depends_on:
+      idam-api:
+        condition: service_healthy
+
+  idam-api:
+    image: docker.artifactory.reform.hmcts.net/auth/idam-api
+    command: --wait-for-database 30
+    environment:
+      - IDAM_SUPERUSER_EMAIL=
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://idam-database:5432/idam
+      - SPRING_PROFILES_ACTIVE=test
+      - IDAM_TESTING_SUPPORT_ENABLED=true
+      - LOGGING_LEVEL_UK_GOV_HMCTS_IDAM=DEBUG
+      - http_proxy=
+      - https_proxy=
+      - no_proxy=
+    depends_on:
+      idam-database:
+        condition: service_started
+
+  idam-database:
+    image: docker.artifactory.reform.hmcts.net/auth/idam-database

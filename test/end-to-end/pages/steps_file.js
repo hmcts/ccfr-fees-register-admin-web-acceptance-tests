@@ -1,100 +1,96 @@
-'use strict';
+'use strict'
 // in this file you can append custom step methods to 'I' object
-const jsdom = require('jsdom');
-const Factory = require('rosie').Factory;
-const faker = require('faker');
-const fixedFee = faker.name.firstName();
-const PercentageFee = faker.name.firstName();
-const RangeGroupName = faker.name.firstName();
+const jsdom = require('jsdom')
+const Factory = require('rosie').Factory
+const faker = require('faker')
+const fixedFee = faker.name.firstName()
+const PercentageFee = faker.name.firstName()
+const RangeGroupName = faker.name.firstName()
 
-module.exports = function() {
+module.exports = function () {
 
   return actor({
+    login: function (email, password) {
+      this.fillField('Email address', email)
+      this.fillField('Password', password)
+      this.waitForElement({css: '[type="submit"]'}, 30)
+      this.click({css: '[type="submit"]'})
+    },
 
-    // Define custom steps here, use 'this' to access default methods of I.
-    // It is recommended to place a general 'login' function here.
-      login: function(email, password) {
-          this.fillField('Email address', email);
-          this.fillField('Password', password);
-          this.waitForElement({css: '[type="submit"]'}, 30);
-          this.click({css: '[type="submit"]'});
-      },
+    getWelcomePage: function () {
+      this.see('Welcome')
+      this.see('Edit categories')
+      this.see('Edit range groups')
+      this.see('Edit fees')
+      this.click('Sign out')
+    },
 
-      getWelcomePage: function() {
-          this.see('Welcome');
-          this.see('Edit categories');
-          this.see('Edit range groups');
-          this.see('Edit fees');
-          this.click('Sign out');
-      },
+    getEditFeesPage: function () {
+      this.click('Edit fees')
+    },
 
-      getEditFeesPage: function() {
-          this.click('Edit fees');
-      },
+    getEditRangeGroups: function () {
+      this.click('Edit range groups')
+    },
 
-      getEditRangeGroups: function() {
-          this.click('Edit range groups');
-      },
+    getCreateNewFee: function () {
+      this.click('Create new fee')
+      this.fillField('Code', fixedFee)
+      this.click('#typefixed')
+      this.click('Next')
+      this.see(fixedFee)
+      this.fillField('Amount', '100')
+      this.fillField('Description', 'Testing')
+      this.click('Save')
+      this.see(fixedFee)
+    },
 
-      getCreateNewFee: function() {
-          this.click('Create new fee');
-          this.fillField('Code', fixedFee);
-          this.click('Fixed');
-          this.click('Next');
-          this.see(fixedFee);
-          this.fillField('Amount', '100');
-          this.fillField('Description', 'Testing');
-          this.click('Save');
-          this.see(fixedFee);
-      },
+    editFeesCode: function () {
+      this.click(fixedFee)
+      this.fillField('Amount', '200')
+      this.fillField('Description', 'Updated Testing')
+      this.click('Save')
+      this.see(fixedFee)
+    },
+    getCreateNewPercentageFee: function () {
+      this.click('Create new fee')
+      this.fillField('Code', PercentageFee)
+      this.click('#typepercentage')
+      this.click('Next')
+      this.see(PercentageFee)
+      this.fillField('percentage', '12.25')
+      this.fillField('Description', 'Testing')
+      this.click('Save')
+      this.see(PercentageFee)
+    },
 
-      editFeesCode: function() {
-          this.click(fixedFee);
-          this.fillField('Amount', '200');
-          this.fillField('Description', 'Updated Testing');
-          this.click('Save');
-          this.see(fixedFee);
-      },
-      getCreateNewPercentageFee: function() {
-          this.click('Create new fee');
-          this.fillField('Code', PercentageFee);
-          this.click('Percentage');
-          this.click('Next');
-          this.see(PercentageFee);
-          this.fillField('percentage', '12.25');
-          this.fillField('Description', 'Testing');
-          this.click('Save');
-          this.see(PercentageFee);
-      },
+    editPercentageFeesCode: function () {
+      this.click(PercentageFee)
+      this.fillField('percentage', '15.40')
+      this.fillField('Description', 'Updated Testing')
+      this.click('Save')
+      this.see(PercentageFee)
+    },
 
-      editPercentageFeesCode: function() {
-          this.click(PercentageFee);
-          this.fillField('percentage', '15.40');
-          this.fillField('Description', 'Updated Testing');
-          this.click('Save');
-          this.see(PercentageFee);
-      },
+    getCreateNewRangeGroup: function () {
+      this.click('Create new range group')
+      this.fillField('Code', RangeGroupName)
+      this.click('Next')
+      this.fillField('Description', 'Testing')
+      this.click('+ Add another range')
+      this.fillField('ranges[0][from]', '0.01')
+      this.fillField('ranges[0][to]', '1000')
+      this.click('Save')
+      this.see(RangeGroupName)
+    },
 
-      getCreateNewRangeGroup: function() {
-          this.click('Create new range group');
-          this.fillField('Code', RangeGroupName);
-          this.click('Next');
-          this.fillField('Description', 'Testing');
-          this.click('+ Add another range');
-          this.fillField('ranges[0][from]', 0.01);
-          this.fillField('ranges[0][to]', 1000);
-          this.click('Save');
-          this.see(RangeGroupName);
-      },
-
-      editNewRangeGroup: function() {
-          this.click(RangeGroupName);
-          this.fillField('Description', 'Updated Testing');
-          this.fillField('ranges[0][from]', 1000);
-          this.fillField('ranges[0][to]', 2000);
-          this.click('Save');
-          this.see(RangeGroupName);
-      },
-
+    editNewRangeGroup: function () {
+      this.click(RangeGroupName)
+      this.fillField('Description', 'Updated Testing')
+      this.fillField('ranges[0][from]', '1000')
+      this.fillField('ranges[0][to]', '2000')
+      this.click('Save')
+      this.see(RangeGroupName)
+    }
   })
-};
+}
