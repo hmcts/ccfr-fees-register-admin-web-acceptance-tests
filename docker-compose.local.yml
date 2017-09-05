@@ -1,0 +1,16 @@
+version: '2.1'
+
+services:
+  fees-admin-web:
+    environment:
+      - IDAM_AUTHENTICATION_WEB_URL=https://localhost:3001
+    ports:
+      - 3415:3000
+
+  authentication-web:
+    ports:
+      - 3001:8000
+
+  idam-api:
+    ports:
+      - 4551:8080
