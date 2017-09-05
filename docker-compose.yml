@@ -22,7 +22,7 @@ services:
       fees-api:
         condition: service_healthy
       fees-admin-web:
-        condition: service_started
+        condition: service_healthy
       authentication-web:
         condition: service_healthy
     volumes:
@@ -38,6 +38,7 @@ services:
       - IDAM_AUTHENTICATION_WEB_URL=https://authentication-web:8000
       - IDAM_API_URL=http://idam-api:8080
       - FEES_URL=http://fees-api:8080
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
     depends_on:
       fees-api:
         condition: service_healthy
