@@ -29,7 +29,7 @@ services:
       - ./output:/usr/src/app/output
 
   remote-webdriver:
-    image: docker.artifactory.reform.hmcts.net/selenium/standalone-chrome:3
+    image: docker.artifactory.reform.hmcts.net/selenium/standalone-chrome:e12c3674c289174e67af720dcd2c5996951a9b10e6aac8f63281fdf3ffec1b13
 
   fees-admin-web:
     image: docker.artifactory.reform.hmcts.net/fees-register/fees-admin-web:${FEES_ADMIN_WEB_DOCKER_VERSION:-latest}
