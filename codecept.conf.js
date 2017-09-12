@@ -13,8 +13,8 @@ exports.config = {
       url: process.env.URL || 'https://localhost:3415',
       waitForTimeout: 15000,
       desiredCapabilities: {
-        proxy: new ProxySettings()
-      }
+         proxy: new ProxySettings()
+       }
     }
   },
   include: {
