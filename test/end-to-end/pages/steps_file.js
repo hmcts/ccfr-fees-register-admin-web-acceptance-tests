@@ -18,13 +18,22 @@ module.exports = function () {
       this.click({css: '[type="submit"]'})
     },
 
-    getWelcomePage: function () {
+    getWelcomePage1: function () {
       this.see('Welcome')
       this.see('Edit categories')
       this.see('Edit range groups')
       this.see('Edit fees')
       this.click('Sign out')
     },
+
+      getWelcomePage: function () {
+          this.see('Welcome')
+          this.see('Categories')
+          this.see('Range groups')
+          this.see('Fees')
+          this.see('All fees')
+          this.click('Sign out')
+      },
 
     getEditFeesPage: function () {
       this.click('Edit fees')
