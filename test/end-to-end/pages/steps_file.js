@@ -28,10 +28,8 @@ module.exports = function () {
 
       getWelcomePage: function () {
           this.see('Welcome')
-          this.see('Categories')
-          this.see('Range groups')
-          this.see('Fees')
-          this.see('All fees')
+          this.see('Choose an action')
+          this.see('Reference Data')
           this.click('Sign out')
       },
 
