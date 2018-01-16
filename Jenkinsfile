@@ -2,7 +2,7 @@
 @Library("Reform") _
 
 properties([
-        [$class: 'GithubProjectProperty', displayName: 'Fees Register Admin Web acceptance tests', projectUrlStr: 'https://git.reform.hmcts.net/fees-register/fees-register-admin-web-acceptance-tests'],
+        [$class: 'GithubProjectProperty', displayName: 'Fees Register Admin Web acceptance tests', projectUrlStr: 'https://github.com/hmcts/ccfr-fees-register-admin-web-acceptance-tests'],
         parameters([
                 string(defaultValue: 'latest', description: 'fees-admin-web Docker Version', name: 'feesAdminWebDockerVersion')
         ])
