@@ -24,7 +24,7 @@
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.2",
     "superagent": "^3.6.0",
-    "yarn": "^0.27.5"
+    "yarn": "^1.22.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
